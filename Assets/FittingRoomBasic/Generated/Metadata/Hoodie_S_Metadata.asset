@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4316cbc45b3c34ac08d74790b8720de1, type: 3}
+  m_Name: Hoodie_S_Metadata
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::GarmentMetadata
+  garmentId: 4c5f99093aec4a61a4a270f91ece1b6c
+  styleName: Hoodie
+  sizeLabel: S
+  category: 0
+  garmentPrefab: {fileID: 7835302484854060911, guid: 6fe28a92c56b4487a9ffd2cb392e2ea6, type: 3}
+  sourceFbxPath: Assets/exports/Hoodie_S.fbx

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7241754785233004138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288357779146990875}
+  - component: {fileID: 7116444477967492488}
+  m_Layer: 0
+  m_Name: Onboarding
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1288357779146990875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7241754785233004138}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.28157, y: 0, z: -8.62522}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7116444477967492488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7241754785233004138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 540fc76b20892422b8a568cd5fe8acc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OnboardingManager
+  onboardingPanel: {fileID: 0}
+  confirmationPanel: {fileID: 0}
+  arScene: {fileID: 0}
+  maleButton: {fileID: 0}
+  femaleButton: {fileID: 0}
+  metricButton: {fileID: 0}
+  imperialButton: {fileID: 0}
+  metricHeightGroup: {fileID: 0}
+  heightInput: {fileID: 0}
+  imperialHeightGroup: {fileID: 0}
+  feetInput: {fileID: 0}
+  inchesInput: {fileID: 0}
+  chestInput: {fileID: 0}
+  chestLabel: {fileID: 0}
+  startButton: {fileID: 0}
+  confirmHeightCmInput: {fileID: 0}
+  confirmHeightFtInput: {fileID: 0}
+  confirmHeightInInput: {fileID: 0}
+  confirmChestInput: {fileID: 0}
+  confirmMetricHeightGroup: {fileID: 0}
+  confirmImperialHeightGroup: {fileID: 0}
+  confirmButton: {fileID: 0}
+  maleUnified: {fileID: 0}
+  femaleUnified: {fileID: 0}
+  maleHoodieSizes: {fileID: 0}
+  femaleHoodieSizes: {fileID: 0}
+  maleLegacyHoodiePrefab: {fileID: 8953777063650532578, guid: 06ef4a061b0384cfd93c63f20a705cc5, type: 3}
+  femaleLegacyHoodiePrefab: {fileID: 5553515838542458701, guid: cd692d8a1277f4a96a8ec17940dc5359, type: 3}
+  maleSpine: {fileID: 0}
+  maleSpine1: {fileID: 0}
+  maleLeftUpLeg: {fileID: 0}
+  maleRightUpLeg: {fileID: 0}
+  maleLeftLeg: {fileID: 0}
+  maleRightLeg: {fileID: 0}
+  femaleSpine: {fileID: 0}
+  femaleSpine1: {fileID: 0}
+  femaleLeftUpLeg: {fileID: 0}
+  femaleRightUpLeg: {fileID: 0}
+  femaleLeftLeg: {fileID: 0}
+  femaleRightLeg: {fileID: 0}
+  boneAttacher: {fileID: 0}
