@@ -54,6 +54,20 @@ public sealed class AvatarBodyMeasurementApplier : MonoBehaviour
     public bool hasProfile;
     public BodyDnaProfile profile = BodyDnaProfile.Default;
 
+
+    [Header("Measurement Calibration")]
+    [Tooltip("Reference chest in inches that maps to neutral DNA value 0.5.")]
+    public float neutralChestInches = 39f;
+
+    [Tooltip("Reference height in inches that maps to neutral DNA value 0.5.")]
+    public float neutralHeightInches = 69f;
+
+    [Tooltip("How much chest DNA shifts per inch from neutral chest.")]
+    public float chestDnaPerInch = 0.04f;
+
+    [Tooltip("How much height DNA shifts per inch from neutral height.")]
+    public float heightDnaPerInch = 0.04f;
+
     private Coroutine _deferredApply;
     private bool _loggedAvailableDna;
 
@@ -112,6 +126,108 @@ public sealed class AvatarBodyMeasurementApplier : MonoBehaviour
             this);
 
         TryApplyOrDefer("SetProfile", rebuild: true);
+    }
+
+
+    public void ApplyFitProfile(HoodieFitProfile fitProfile)
+    {
+        if (fitProfile == null)
+        {
+            Debug.LogWarning("AvatarBodyMeasurementApplier.ApplyFitProfile called with null profile.", this);
+            return;
+        }
+
+        ApplyChest(fitProfile.chestIdeal);
+        ApplyHeight(fitProfile.heightIdeal);
+    }
+
+    public void ApplyChest(float chestInches)
+    {
+        var updated = profile;
+
+        // Chest fit calibration assumptions:
+        // - Torso/rib cage/chest breadth should react strongly.
+        // - Shoulder/deltoid silhouette should react moderately.
+        // - Upper arm thickness should react mildly.
+        // - Forearm thickness should react very mildly to avoid fake sleeve clipping.
+        // - Waist follows chest only partially.
+        ApplyChestCore(ref updated, chestInches);
+        ApplyShoulderWidth(ref updated, chestInches);
+        ApplyArmThickness(ref updated, chestInches);
+
+        SetProfile(updated);
+    }
+
+    public void ApplyHeight(float heightInches)
+    {
+        var updated = profile;
+
+        // Height distribution assumptions:
+        // - Leg length contributes the most to stature change.
+        // - Torso/overall body length contributes moderately.
+        // - Arm length contributes mildly for believable sleeve/hem testing.
+        ApplyLegLength(ref updated, heightInches);
+        ApplyTorsoLength(ref updated, heightInches);
+        ApplyArmLength(ref updated, heightInches);
+
+        SetProfile(updated);
+    }
+
+    private void ApplyChestCore(ref BodyDnaProfile updated, float chestInches)
+    {
+        var chestDelta = chestInches - neutralChestInches;
+        var chestStrong = Mathf.Clamp01(0.5f + (chestDelta * chestDnaPerInch));
+
+        updated.upperWeight = chestStrong;
+        updated.belly = Mathf.Lerp(0.5f, chestStrong, 0.5f);
+
+        // Waist coupling is intentionally weaker than chest core growth.
+        updated.waist = Mathf.Lerp(0.5f, chestStrong, 0.3f);
+        updated.lowerWeight = Mathf.Lerp(0.5f, chestStrong, 0.25f);
+    }
+
+    private void ApplyShoulderWidth(ref BodyDnaProfile updated, float chestInches)
+    {
+        var chestDelta = chestInches - neutralChestInches;
+        var shoulderModerate = Mathf.Clamp01(0.5f + (chestDelta * chestDnaPerInch * 0.55f));
+
+        // UMA does not expose an explicit shoulder-width DNA in this project,
+        // so we approximate shoulder influence via upper torso mass + a small
+        // arm-width contribution.
+        updated.upperWeight = Mathf.Lerp(updated.upperWeight, shoulderModerate, 0.3f);
+        updated.armWidth = Mathf.Lerp(updated.armWidth, shoulderModerate, 0.35f);
+    }
+
+    private void ApplyArmThickness(ref BodyDnaProfile updated, float chestInches)
+    {
+        var chestDelta = chestInches - neutralChestInches;
+        var upperArmMild = Mathf.Clamp01(0.5f + (chestDelta * chestDnaPerInch * 0.35f));
+        var forearmVeryMild = Mathf.Clamp01(0.5f + (chestDelta * chestDnaPerInch * 0.15f));
+
+        updated.armWidth = Mathf.Lerp(updated.armWidth, upperArmMild, 0.7f);
+        updated.forearmWidth = Mathf.Lerp(updated.forearmWidth, forearmVeryMild, 0.85f);
+    }
+
+    private void ApplyLegLength(ref BodyDnaProfile updated, float heightInches)
+    {
+        var heightDelta = heightInches - neutralHeightInches;
+        var legBias = Mathf.Clamp01(0.5f + (heightDelta * heightDnaPerInch * 0.9f));
+        updated.legsSize = Mathf.Lerp(0.5f, legBias, 0.85f);
+    }
+
+    private void ApplyTorsoLength(ref BodyDnaProfile updated, float heightInches)
+    {
+        var heightDelta = heightInches - neutralHeightInches;
+        var torsoModerate = Mathf.Clamp01(0.5f + (heightDelta * heightDnaPerInch * 0.55f));
+        updated.height = torsoModerate;
+    }
+
+    private void ApplyArmLength(ref BodyDnaProfile updated, float heightInches)
+    {
+        var heightDelta = heightInches - neutralHeightInches;
+        var armMild = Mathf.Clamp01(0.5f + (heightDelta * heightDnaPerInch * 0.4f));
+        updated.armLength = Mathf.Lerp(0.5f, armMild, 0.65f);
+        updated.forearmLength = Mathf.Lerp(0.5f, armMild, 0.6f);
     }
 
     private void OnCharacterUpdated(UMAData umaData)
